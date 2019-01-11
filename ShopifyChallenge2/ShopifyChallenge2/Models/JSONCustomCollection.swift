@@ -13,14 +13,20 @@ struct JSONCustomCollection{
     
     let title: String?
     let collectionId: String?
+    let bodyHtml: String?
+    let collectionImageUrl: String?
     
     init?(json: JSON) {
         guard
         let title = json["title"].string,
+        let bodyHtml = json["body_html"].string,
+        let collectionImageUrl = json["image"]["src"].string,
         let collectionId = json["id"].string else{
             return nil
         }
         self.title = title
+        self.bodyHtml = bodyHtml
+        self.collectionImageUrl = collectionImageUrl
         self.collectionId = collectionId
     }
 }

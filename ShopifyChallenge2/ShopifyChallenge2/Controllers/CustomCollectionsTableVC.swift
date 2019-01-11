@@ -27,7 +27,7 @@ class CustomCollectionsTableVC: UITableViewController {
 //            }
 //        }
         APIClient.fetchProducts(collectionId: "68424466488", completion: {result in
-            print(result)
+            print(result as Any)
         })
     }
     
