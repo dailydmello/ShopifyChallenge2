@@ -13,15 +13,18 @@ struct JSONProuduct{
     
     let productTitle: String?
     let inventory: Int?
+    let productImageUrl: String?
     
     init?(json:JSON) {
         guard
         let productTitle = json["title"].string,
+        let productImageUrl = json["image"]["src"].string,
         let variants = json["variants"].array
         else{
             return nil
         }
         self.productTitle = productTitle
+        self.productImageUrl = productImageUrl
         self.inventory = variants.reduce(0){sum, json in
             sum + json["inventory_quantity"].int!
         }
