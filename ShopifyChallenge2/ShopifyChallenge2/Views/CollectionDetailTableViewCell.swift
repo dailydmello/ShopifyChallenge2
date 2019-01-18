@@ -14,4 +14,13 @@ class CollectionDetailTableViewCell: UITableViewCell{
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var inventoryLabel: UILabel!
     
+    override func awakeFromNib() {
+        super .awakeFromNib()
+        self.isUserInteractionEnabled = false
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        productImageView.image = nil
+    }
 }

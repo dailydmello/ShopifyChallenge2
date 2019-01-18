@@ -8,55 +8,40 @@
 
 import UIKit
 
-protocol CustomCollectionTVCDelegate{
-    func passData () -> [String]
+protocol CustomCollectionDelegate{
+    func passCollection () -> JSONCustomCollection
 }
-class CustomCollectionsTableVC: UITableViewController, CustomCollectionTVCDelegate{
+class CustomCollectionsTableVC: UITableViewController{
     
+    var collectionSelected: JSONCustomCollection?
     var customCollections = [JSONCustomCollection](){
         didSet{
             tableView.reloadData()
         }
     }
     
-    var collectionSelected: JSONCustomCollection?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let backgroundImage =  UIImage(named: "shopify")
+        let imageView = UIImageView(image: backgroundImage)
+        self.tableView.backgroundView = imageView
+        imageView.contentMode = .scaleAspectFit
+        self.tableView.separatorColor = UIColor.black
         APIClient.fetchCustomCollection{result in
             if let result = result {
                 self.customCollections = result
-              //  print(result)
             }else{
                 print("fetch data empty")
             }
         }
-//        APIClient.fetchProducts(collectionId: "68424466488", completion: {result in
-//            print(result as Any)
-//        })
-    }
-    
-    func passData() -> [String]{
-        var tempArr = [String]()
-
-        if let collectionSelected = collectionSelected{
-            tempArr.append(String(collectionSelected.collectionId ?? 0))
-            tempArr.append(collectionSelected.title ?? "")
-            tempArr.append(collectionSelected.bodyHtml ?? "")
-            tempArr.append(collectionSelected.collectionImageUrl ?? "")
-            return tempArr
-        }else{
-            return ["nil"]
-        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else { return }
         switch identifier{
         case "displayDetail":
-            print("This is\(segue.destination)")
-
             if let collectionDetailVC = segue.destination as? CollectionDetailVC{
                 collectionDetailVC.delegate = self}
         default:
@@ -75,7 +60,6 @@ class CustomCollectionsTableVC: UITableViewController, CustomCollectionTVCDelega
         let customCollection = customCollections[indexPath.row]
         cell.customCollectionTitle.text = customCollection.title
         
-        
         return cell
     }
     
@@ -83,8 +67,17 @@ class CustomCollectionsTableVC: UITableViewController, CustomCollectionTVCDelega
         collectionSelected = customCollections[indexPath.row]
     }
     
+}
+
+extension CustomCollectionsTableVC: CustomCollectionDelegate{
     
-    
+    func passCollection() -> JSONCustomCollection{
+        guard let collectionSelected = collectionSelected else{
+            fatalError("custom collection is nil")
+        }
+        return collectionSelected
+
+    }
 }
 
 

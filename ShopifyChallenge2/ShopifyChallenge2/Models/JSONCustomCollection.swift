@@ -12,21 +12,21 @@ import SwiftyJSON
 struct JSONCustomCollection{
     
     let title: String?
-    let collectionId: Int?
+    let id: Int?
     let bodyHtml: String?
-    let collectionImageUrl: String?
+    let imageUrl: String?
     
     init?(json: JSON) {
         guard
         let title = json["title"].string,
         let bodyHtml = json["body_html"].string,
-        let collectionImageUrl = json["image"]["src"].string,
-        let collectionId = json["id"].int else{
+        let imageUrl = json["image"]["src"].string,
+        let id = json["id"].int else{
             return nil
         }
         self.title = title
         self.bodyHtml = bodyHtml
-        self.collectionImageUrl = collectionImageUrl
-        self.collectionId = collectionId
+        self.imageUrl = imageUrl
+        self.id = id
     }
 }

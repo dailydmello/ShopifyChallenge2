@@ -38,8 +38,10 @@ struct APIClient{
         }
     }
     
-    static func fetchProducts(collectionId: String, completion: @escaping FetchProductsCallback){
-        let apiToContact = "https://shopicruit.myshopify.com/admin/collects.json?collection_id=\(collectionId)&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6"
+    static func fetchProducts(with collectionId: Int, completion: @escaping FetchProductsCallback){
+        let colletcionIdString = String(collectionId)
+        let apiToContact = "https://shopicruit.myshopify.com/admin/collects.json?collection_id=\(colletcionIdString)&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6"
+        
         Alamofire.request(apiToContact).validate().responseJSON {response in
             switch response.result {
                 
