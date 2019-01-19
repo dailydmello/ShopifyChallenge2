@@ -11,21 +11,24 @@ import UIKit
 
 class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDelegate{
     
-    
+    //MARK: Properties
     @IBOutlet weak var collectionTitleLabel: UILabel!
     @IBOutlet weak var collectionDescription: UILabel!
     @IBOutlet weak var collectionImageVIew: UIImageView!
     @IBOutlet weak var productsTableView: UITableView!
-    
     @IBOutlet weak var topContainer: UIView!
     
     var loadingView = UIView()
     var collection: JSONCustomCollection?
     var delegate: CustomCollectionDelegate?
     var collectionId: String = ""
+    var products = [JSONProuduct](){
+        didSet{
+            productsTableView.reloadData()
+        }
+    }
     var collectionImageUrl: String?{
         get{
-            
             return collection?.imageUrl
         }
         set{
@@ -33,7 +36,6 @@ class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDele
                 print("collectionURL is nil")
                 return
             }
-            
             if let contentUrl = URL(string: newValue) {
                 do{
                 let data = try Data(contentsOf: contentUrl)
@@ -43,38 +45,24 @@ class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDele
                     print("Error accessing contents of URL with error: \(error)")
                 }
             }else{print("to table view cell url is nil")}
-            
-        }
-    }
-    var products = [JSONProuduct](){
-        didSet{
-           productsTableView.reloadData()
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        topContainer.layer.borderColor = UIColor.black.cgColor
-        topContainer.layer.borderWidth = 0.5
-        let backgroundImage =  UIImage(named: "shopify")
-        let imageView = UIImageView(image: backgroundImage)
-        productsTableView.backgroundView = imageView
-        imageView.contentMode = .scaleAspectFit
-        productsTableView.separatorColor = UIColor.black
-        productsTableView.rowHeight = 100
+        setupViews()
         displayLoadingScreen()
         
         if let delegate = delegate{
             collection = delegate.passCollection()
-            collectionTitleLabel.text = collection?.title
-            collectionDescription.text = collection?.bodyHtml
             collectionImageUrl = collection?.imageUrl
 
-            
             if let collectionId = collection?.id{
                 APIClient.fetchProducts(with: collectionId){result in
                     if let result = result{
                         self.products = result
+                        self.collectionTitleLabel.text = self.collection?.title
+                        self.collectionDescription.text = self.collection?.bodyHtml
                         self.loadingView.removeFromSuperview()
                         //print(self.products)
                     }else{
@@ -90,23 +78,32 @@ class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDele
         }
     }
     
+    func setupViews(){
+        topContainer.layer.borderColor = UIColor.black.cgColor
+        topContainer.layer.borderWidth = 0.5
+        let backgroundImage =  UIImage(named: Constants.ImageName.shopify)
+        let imageView = UIImageView(image: backgroundImage)
+        productsTableView.backgroundView = imageView
+        imageView.contentMode = .scaleAspectFit
+        productsTableView.separatorColor = UIColor.black
+        productsTableView.rowHeight = 100
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = productsTableView.dequeueReusableCell(withIdentifier: "productsTableViewCell", for: indexPath) as! CollectionDetailTableViewCell
+        let cell = productsTableView.dequeueReusableCell(withIdentifier: Constants.productsTableViewCell, for: indexPath) as! CollectionDetailTableViewCell
         
         let product = products[indexPath.row]
-        cell.inventoryLabel.text = "Inventory: \(String(product.inventory ?? 0))"
+        cell.inventoryLabel.text = "\(Constants.inventoryString) \(String(product.inventory ?? 0))"
         cell.productTitleLabel.text = product.productTitle
 
         if let url = product.productImageUrl, let contentUrl = URL(string: url) {
-            //so data doesnt block UI on main queue
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: contentUrl)
                 DispatchQueue.main.async {
                     cell.productImageView.image = UIImage(data: data!)
                 }
             }
-        }else{print("unable to table view cell pic")
-        }
+        }else{print("product image url is empty")}
         return cell
         
     }
@@ -115,14 +112,13 @@ class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDele
     }
     
     func displayLoadingScreen(){
-        //TODO: Redo UI contraints
-//        foodCardBackground.center.x = self.view.center.x
         loadingView = UIView(frame: CGRect(x: 0, y: 0, width: productsTableView.frame.width*0.4, height: productsTableView.frame.height*0.4))
         loadingView.center = productsTableView.center
         loadingView.backgroundColor = UIColor.white
         loadingView.layer.borderColor = UIColor.black.cgColor
         loadingView.layer.borderWidth = 1.5
-        loadingView.clipsToBounds = false
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 20
         
         let activityIndicator = UIActivityIndicatorView(style: .gray)
         activityIndicator.center.x = loadingView.frame.width/2
@@ -134,7 +130,7 @@ class CollectionDetailVC: UIViewController,UITableViewDataSource,UITableViewDele
         loadingLabel.textColor = UIColor.black
         loadingLabel.adjustsFontSizeToFitWidth = true
         loadingLabel.textAlignment = .center
-        loadingLabel.text = "Loading Collection!"
+        loadingLabel.text = Constants.loadingCollectionString
         loadingLabel.font = UIFont(name: "System", size: 18)
         
         loadingView.addSubview(activityIndicator)

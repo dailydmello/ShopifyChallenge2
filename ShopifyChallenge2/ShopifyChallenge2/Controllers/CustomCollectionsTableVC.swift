@@ -13,6 +13,7 @@ protocol CustomCollectionDelegate{
 }
 class CustomCollectionsTableVC: UITableViewController{
     
+    //MARK: Properties
     var collectionSelected: JSONCustomCollection?
     var customCollections = [JSONCustomCollection](){
         didSet{
@@ -20,14 +21,10 @@ class CustomCollectionsTableVC: UITableViewController{
         }
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage =  UIImage(named: "shopify")
-        let imageView = UIImageView(image: backgroundImage)
-        self.tableView.backgroundView = imageView
-        imageView.contentMode = .scaleAspectFit
-        self.tableView.separatorColor = UIColor.black
+        setupViews()
+        
         APIClient.fetchCustomCollection{result in
             if let result = result {
                 self.customCollections = result
@@ -38,10 +35,18 @@ class CustomCollectionsTableVC: UITableViewController{
         
     }
     
+    func setupViews(){
+        let backgroundImage =  UIImage(named: Constants.ImageName.shopify)
+        let imageView = UIImageView(image: backgroundImage)
+        self.tableView.backgroundView = imageView
+        imageView.contentMode = .scaleAspectFit
+        self.tableView.separatorColor = UIColor.black
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else { return }
         switch identifier{
-        case "displayDetail":
+        case Constants.displayDetail:
             if let collectionDetailVC = segue.destination as? CollectionDetailVC{
                 collectionDetailVC.delegate = self}
         default:
@@ -55,7 +60,7 @@ class CustomCollectionsTableVC: UITableViewController{
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCollectionTableViewCell", for: indexPath) as! CustomCollectionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.customCollectionTableViewCell, for: indexPath) as! CustomCollectionTableViewCell
         
         let customCollection = customCollections[indexPath.row]
         cell.customCollectionTitle.text = customCollection.title
@@ -69,6 +74,7 @@ class CustomCollectionsTableVC: UITableViewController{
     
 }
 
+//MARK: CustomCollection delegate methods
 extension CustomCollectionsTableVC: CustomCollectionDelegate{
     
     func passCollection() -> JSONCustomCollection{

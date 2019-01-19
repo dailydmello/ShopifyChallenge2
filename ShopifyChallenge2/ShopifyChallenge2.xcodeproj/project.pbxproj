@@ -20,6 +20,7 @@
 		DD376B1521E84D96008D594D /* JSONProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD376B1421E84D96008D594D /* JSONProduct.swift */; };
 		DD376B1721E9341D008D594D /* CollectionDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD376B1621E9341D008D594D /* CollectionDetailVC.swift */; };
 		DD376B1921E93B75008D594D /* CollectionDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD376B1821E93B75008D594D /* CollectionDetailTableViewCell.swift */; };
+		DDEFFEB621F2980A00EA3892 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEFFEB521F2980A00EA3892 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		DD376B1421E84D96008D594D /* JSONProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONProduct.swift; sourceTree = "<group>"; };
 		DD376B1621E9341D008D594D /* CollectionDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailVC.swift; sourceTree = "<group>"; };
 		DD376B1821E93B75008D594D /* CollectionDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailTableViewCell.swift; sourceTree = "<group>"; };
+		DDEFFEB521F2980A00EA3892 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E3D952AB7DD4C998FED45B96 /* Pods_ShopifyChallenge2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShopifyChallenge2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 		DD376B0A21E80D61008D594D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DDEFFEB521F2980A00EA3892 /* Constants.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				DD376AFA21E7FCDC008D594D /* ShopifyChallenge2.xcdatamodeld in Sources */,
 				DD376B1721E9341D008D594D /* CollectionDetailVC.swift in Sources */,
 				DD376B0721E7FEA9008D594D /* CustomCollectionsTableVC.swift in Sources */,
+				DDEFFEB621F2980A00EA3892 /* Constants.swift in Sources */,
 				DD376AF221E7FCDC008D594D /* AppDelegate.swift in Sources */,
 				DD376B0921E803F1008D594D /* APIClient.swift in Sources */,
 				DD376B1121E80EBD008D594D /* JSONCustomCollection.swift in Sources */,
